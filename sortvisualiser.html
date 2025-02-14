@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Sorting Steps Visualizer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    /* Display the array as boxes */
+    #arrayDisplay {
+      margin: 20px auto;
+      font-size: 24px;
+      display: inline-block;
+      min-width: 300px;
+    }
+    .number {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      margin: 5px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      background-color: #f1f1f1;
+      transition: background-color 0.3s;
+    }
+    /* Optional highlight for active numbers */
+    .highlight {
+      background-color: yellow;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #infoDisplay {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    #stepsDisplay {
+      margin-top: 20px;
+      text-align: left;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 16px;
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    .step {
+      padding: 5px;
+      border-bottom: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sorting Steps Visualizer</h1>
+  <div>
+    <button onclick="startSort('bubble')">Bubble Sort</button>
+    <button onclick="startSort('selection')">Selection Sort</button>
+    <button onclick="startSort('insertion')">Insertion Sort</button>
+    <button onclick="startSort('merge')">Merge Sort</button>
+    <button onclick="startSort('quick')">Quick Sort</button>
+    <button onclick="startSort('count')">Count Sort</button>
+    <button onclick="resetArray()">Reset Array</button>
+  </div>
+
+  <!-- This shows the current array visually -->
+  <div id="arrayDisplay"></div>
+  <!-- This shows the algorithm information after sorting completes -->
+  <div id="infoDisplay"></div>
+  <!-- This displays the list of iterations (each step of the array) -->
+  <div id="stepsDisplay"></div>
+
+  <script>
+    // Initial unsorted array.
+    const originalArray = [45, 2, 78, 9, 98, 7];
+    let array = [...originalArray];
+    // Will hold snapshots of the array at each iteration.
+    let iterations = [];
+    let startTime, endTime;
+    // Adjust delay between steps (milliseconds)
+    const delayTime = 300;
+
+    // Predefined time complexities for each algorithm.
+    const complexities = {
+      bubble: "O(n²)",
+      selection: "O(n²)",
+      insertion: "O(n²) worst-case, O(n) best-case",
+      merge: "O(n log n)",
+      quick: "O(n log n) average, O(n²) worst-case",
+      count: "O(n + k)"
+    };
+
+    // Displays the current state of the array as boxes.
+    function displayArray(highlightIndices = []) {
+      const arrayDisplay = document.getElementById("arrayDisplay");
+      arrayDisplay.innerHTML = "";
+      array.forEach((num, index) => {
+        const span = document.createElement("span");
+        span.className = "number";
+        span.textContent = num;
+        if (highlightIndices.includes(index)) {
+          span.classList.add("highlight");
+        }
+        arrayDisplay.appendChild(span);
+      });
+    }
+
+    // Records the current state of the array.
+    function recordIteration() {
+      iterations.push(array.slice());
+    }
+
+    // After sorting is finished, display all the iterations.
+    function displayIterations() {
+      const stepsDisplay = document.getElementById("stepsDisplay");
+      stepsDisplay.innerHTML = "<h3>Iterations:</h3>";
+      iterations.forEach((stepArray, index) => {
+        const div = document.createElement("div");
+        div.className = "step";
+        div.textContent = "Step " + index + ": " + stepArray.join(" ");
+        stepsDisplay.appendChild(div);
+      });
+    }
+
+    // Disable/enable buttons during sorting.
+    function disableButtons(disabled) {
+      document.querySelectorAll("button").forEach(btn => {
+        btn.disabled = disabled;
+      });
+    }
+
+    // Reset the array and clear the iterations and info displays.
+    function resetArray() {
+      array = [...originalArray];
+      iterations = [];
+      document.getElementById("infoDisplay").innerHTML = "";
+      document.getElementById("stepsDisplay").innerHTML = "";
+      displayArray();
+      recordIteration();  // Record initial state as step 0.
+    }
+
+    // A helper delay function.
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // ------------- Sorting Algorithms (with iteration recording) -------------
+
+    // Bubble Sort
+    async function bubbleSort() {
+      let n = array.length;
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+          displayArray([j, j + 1]);
+          await delay(delayTime);
+          if (array[j] > array[j + 1]) {
+            [array[j], array[j + 1]] = [array[j + 1], array[j]];
+            displayArray([j, j + 1]);
+            await delay(delayTime);
+            recordIteration();
+          }
+        }
+      }
+    }
+
+    // Selection Sort
+    async function selectionSort() {
+      let n = array.length;
+      for (let i = 0; i < n; i++) {
+        let minIndex = i;
+        for (let j = i + 1; j < n; j++) {
+          displayArray([minIndex, j]);
+          await delay(delayTime);
+          if (array[j] < array[minIndex]) {
+            minIndex = j;
+            displayArray([i, minIndex]);
+            await delay(delayTime);
+          }
+        }
+        if (minIndex !== i) {
+          [array[i], array[minIndex]] = [array[minIndex], array[i]];
+          displayArray([i, minIndex]);
+          await delay(delayTime);
+          recordIteration();
+        }
+      }
+    }
+
+    // Insertion Sort
+    async function insertionSort() {
+      let n = array.length;
+      for (let i = 1; i < n; i++) {
+        let key = array[i];
+        let j = i - 1;
+        while (j >= 0 && array[j] > key) {
+          displayArray([j, j + 1]);
+          await delay(delayTime);
+          array[j + 1] = array[j];
+          j--;
+          displayArray([j + 1]);
+          await delay(delayTime);
+          recordIteration();
+        }
+        array[j + 1] = key;
+        displayArray([j + 1]);
+        await delay(delayTime);
+        recordIteration();
+      }
+    }
+
+    // Merge Sort (recursive)
+    async function mergeSort(start = 0, end = array.length - 1) {
+      if (start >= end) return;
+      const mid = Math.floor((start + end) / 2);
+      await mergeSort(start, mid);
+      await mergeSort(mid + 1, end);
+      await merge(start, mid, end);
+    }
+
+    async function merge(start, mid, end) {
+      let left = array.slice(start, mid + 1);
+      let right = array.slice(mid + 1, end + 1);
+      let i = 0, j = 0, k = start;
+      while (i < left.length && j < right.length) {
+        displayArray([k]);
+        await delay(delayTime);
+        if (left[i] <= right[j]) {
+          array[k] = left[i];
+          i++;
+        } else {
+          array[k] = right[j];
+          j++;
+        }
+        k++;
+        displayArray([k - 1]);
+        await delay(delayTime);
+        recordIteration();
+      }
+      while (i < left.length) {
+        array[k] = left[i];
+        displayArray([k]);
+        await delay(delayTime);
+        i++;
+        k++;
+        recordIteration();
+      }
+      while (j < right.length) {
+        array[k] = right[j];
+        displayArray([k]);
+        await delay(delayTime);
+        j++;
+        k++;
+        recordIteration();
+      }
+    }
+
+    // Quick Sort (recursive)
+    async function quickSort(start = 0, end = array.length - 1) {
+      if (start < end) {
+        let pivotIndex = await partition(start, end);
+        await quickSort(start, pivotIndex - 1);
+        await quickSort(pivotIndex + 1, end);
+      }
+    }
+
+    async function partition(start, end) {
+      let pivot = array[end];
+      let i = start;
+      for (let j = start; j < end; j++) {
+        displayArray([j, end]);
+        await delay(delayTime);
+        if (array[j] < pivot) {
+          [array[i], array[j]] = [array[j], array[i]];
+          displayArray([i, j]);
+          await delay(delayTime);
+          i++;
+          recordIteration();
+        }
+      }
+      [array[i], array[end]] = [array[end], array[i]];
+      displayArray([i, end]);
+      await delay(delayTime);
+      recordIteration();
+      return i;
+    }
+
+    // Count Sort (for non-negative integers)
+    async function countSort() {
+      let maxVal = Math.max(...array);
+      let countArr = new Array(maxVal + 1).fill(0);
+      // Count frequency.
+      for (let i = 0; i < array.length; i++) {
+        countArr[array[i]]++;
+        displayArray([i]);
+        await delay(delayTime / 2);
+      }
+      // Reconstruct the sorted array.
+      let index = 0;
+      for (let i = 0; i < countArr.length; i++) {
+        while (countArr[i] > 0) {
+          array[index] = i;
+          displayArray([index]);
+          await delay(delayTime);
+          recordIteration();
+          index++;
+          countArr[i]--;
+        }
+      }
+    }
+
+    // ------------- Start the Sort -------------
+    async function startSort(type) {
+      disableButtons(true);
+      // Reset array and clear any previous info/iterations.
+      resetArray();
+      document.getElementById("infoDisplay").innerHTML = "";
+      document.getElementById("stepsDisplay").innerHTML = "";
+      
+      // Record start time.
+      startTime = performance.now();
+      
+      // Run the chosen sort.
+      switch (type) {
+        case "bubble":
+          await bubbleSort();
+          break;
+        case "selection":
+          await selectionSort();
+          break;
+        case "insertion":
+          await insertionSort();
+          break;
+        case "merge":
+          await mergeSort();
+          break;
+        case "quick":
+          await quickSort();
+          break;
+        case "count":
+          await countSort();
+          break;
+      }
+      
+      // Record end time and compute the elapsed time.
+      endTime = performance.now();
+      let timeTaken = (endTime - startTime).toFixed(2);
+      let stepsCount = iterations.length;
+      
+      // Display algorithm info.
+      const infoHTML = `
+        <h3>Algorithm Info:</h3>
+        <p>Time Complexity: ${complexities[type]}</p>
+        <p>Time Required: ${timeTaken} ms</p>
+        <p>Number of Steps: ${stepsCount}</p>
+      `;
+      document.getElementById("infoDisplay").innerHTML = infoHTML;
+      
+      // Display the recorded iterations.
+      displayIterations();
+      disableButtons(false);
+    }
+
+    // Initialize the page with the unsorted array.
+    resetArray();
+  </script>
+</body>
+</html>
+
+
