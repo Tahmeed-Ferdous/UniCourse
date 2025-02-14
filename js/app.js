@@ -1,51 +1,45 @@
-const toggleButton = document.getElementById('toggle-btn');
-const sidebar = document.getElementById('sidebar');
 
-// Initially shrink the sidebar for larger screens
-if (window.innerWidth > 801) {
-  sidebar.classList.add('close');
-}
+'use strict';
 
-// Toggle sidebar on button click
-function toggleSidebar() {
-  sidebar.classList.toggle('close');
-  toggleButton.classList.toggle('rotate');
-  closeAllSubMenus();
-}
+/**
+ * navbar toggle
+ */
 
-// Open sidebar on hover (only above 801px)
-sidebar.addEventListener('mouseenter', () => {
-  if (window.innerWidth > 801) {
-    sidebar.classList.remove('close');
+const overlay = document.querySelector("[data-overlay]");
+const navbar = document.querySelector("[data-navbar]");
+const navLinks = document.querySelectorAll("[data-nav-link]");
+
+const navElemArr = [overlay];
+
+const navToggleEvent = function (elem) {
+  for (let i = 0; i < elem.length; i++) {
+    elem[i].addEventListener("click", function () {
+      navbar.classList.toggle("active");
+      overlay.classList.toggle("active");
+    });
   }
+}
+
+navToggleEvent(navElemArr);
+navToggleEvent(navLinks);
+
+
+
+/**
+ * header sticky & go to top
+ */
+
+const header = document.querySelector("[data-header]");
+const goTopBtn = document.querySelector("[data-go-top]");
+
+window.addEventListener("scroll", function () {
+
+  if (window.scrollY >= 200) {
+    header.classList.add("active");
+    goTopBtn.classList.add("active");
+  } else {
+    header.classList.remove("active");
+    goTopBtn.classList.remove("active");
+  }
+
 });
-
-// Shrink sidebar on mouse leave (only above 801px)
-sidebar.addEventListener('mouseleave', () => {
-  if (window.innerWidth > 801) {
-    sidebar.classList.add('close');
-  }
-});
-
-// Function to toggle submenus
-function toggleSubMenu(button) {
-  if (!button.nextElementSibling.classList.contains('show')) {
-    closeAllSubMenus();
-  }
-
-  button.nextElementSibling.classList.toggle('show');
-  button.classList.toggle('rotate');
-
-  if (sidebar.classList.contains('close')) {
-    sidebar.classList.toggle('close');
-    toggleButton.classList.toggle('rotate');
-  }
-}
-
-// Close all open submenus
-function closeAllSubMenus() {
-  Array.from(sidebar.getElementsByClassName('show')).forEach((ul) => {
-    ul.classList.remove('show');
-    ul.previousElementSibling.classList.remove('rotate');
-  });
-}
