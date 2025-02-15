@@ -352,8 +352,6 @@ body { background: var(--white); }
 \*-----------------------------------*/
 
 .hero {
-  /* Remove the background-image properties since we'll use a video instead */
-  /* background-image: url("img/hero-banner.jpg"); */
   background-color: hsla(0, 0%, 0%, 0.7); /* Fallback color if video fails to load */
   display: grid;
   place-items: center;
@@ -361,7 +359,7 @@ body { background: var(--white); }
   text-align: center;
   padding-top: 125px;
   position: relative; /* Needed for proper video positioning */
-  overflow: hidden;   /* Hide any overflow from the video */
+  overflow: hidden;  
 }
 
 /* New CSS for the background video */
