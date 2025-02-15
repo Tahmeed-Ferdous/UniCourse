@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Sorting Steps Visualizer</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniCourse</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
+  <link rel="stylesheet" href="style.css">
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -29,13 +33,23 @@
     }
     /* Optional highlight for active numbers */
     .highlight {
-      background-color: yellow;
+      background-color: rgb(162, 199, 244);
     }
     button {
       margin: 5px;
       padding: 10px 15px;
       font-size: 16px;
       cursor: pointer;
+      background-color: rgb(235, 235, 235);
+  
+    }
+    button:hover {
+      background-color: #a2d6f0;
+    }
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     #infoDisplay {
       margin-top: 20px;
@@ -60,317 +74,549 @@
   </style>
 </head>
 <body>
-  <h1>Sorting Steps Visualizer</h1>
-  <div>
-    <button onclick="startSort('bubble')">Bubble Sort</button>
-    <button onclick="startSort('selection')">Selection Sort</button>
-    <button onclick="startSort('insertion')">Insertion Sort</button>
-    <button onclick="startSort('merge')">Merge Sort</button>
-    <button onclick="startSort('quick')">Quick Sort</button>
-    <button onclick="startSort('count')">Count Sort</button>
-    <button onclick="resetArray()">Reset Array</button>
-  </div>
 
-  <!-- This shows the current array visually -->
-  <div id="arrayDisplay"></div>
-  <!-- This shows the algorithm information after sorting completes -->
-  <div id="infoDisplay"></div>
-  <!-- This displays the list of iterations (each step of the array) -->
-  <div id="stepsDisplay"></div>
+  <!-- 
+    - #HEADER
+  -->
 
-  <script>
-    // Initial unsorted array.
-    const originalArray = [45, 2, 78, 9, 98, 7];
-    let array = [...originalArray];
-    // Will hold snapshots of the array at each iteration.
-    let iterations = [];
-    let startTime, endTime;
-    // Adjust delay between steps (milliseconds)
-    const delayTime = 300;
+  <header class="header" data-header>
 
-    // Predefined time complexities for each algorithm.
-    const complexities = {
-      bubble: "O(n²)",
-      selection: "O(n²)",
-      insertion: "O(n²) worst-case, O(n) best-case",
-      merge: "O(n log n)",
-      quick: "O(n log n) average, O(n²) worst-case",
-      count: "O(n + k)"
-    };
+    <div class="overlay" data-overlay></div>
 
-    // Displays the current state of the array as boxes.
-    function displayArray(highlightIndices = []) {
-      const arrayDisplay = document.getElementById("arrayDisplay");
-      arrayDisplay.innerHTML = "";
-      array.forEach((num, index) => {
-        const span = document.createElement("span");
-        span.className = "number";
-        span.textContent = num;
-        if (highlightIndices.includes(index)) {
-          span.classList.add("highlight");
+    <div class="header-top">
+      <div class="container">
+
+        <a href="#" class="logo">
+          UNICOURSE
+        </a>
+
+      </div>
+    </div>
+
+    <div class="header-bottom">
+      <div class="container">
+
+        <ul class="social-list">
+
+          <li>
+            <a href="https://www.facebook.com/profile.php?id=100085270215151" class="social-link">
+              <ion-icon name="logo-facebook"></ion-icon>
+            </a>
+          </li>
+
+          <li>
+            <a href="https://github.com/Tahmeed-Ferdous" class="social-link">
+              <ion-icon name="logo-github"></ion-icon>
+            </a>
+          </li>
+
+          <li>
+            <a href="https://linkedin.com/in/tahmeed-bus" class="social-link">
+              <ion-icon name="logo-linkedin"></ion-icon>
+            </a>
+          </li>
+
+        </ul>
+
+        <nav class="navbar" data-navbar>
+
+          <ul class="navbar-list">
+
+            <li>
+              <a href="index.html" class="navbar-link" data-nav-link>home</a>
+            </li>
+
+            <li>
+              <a href="#destination" class="navbar-link" data-nav-link>Visualisation</a>
+            </li>
+
+            <li>
+              <a href="courses.html" class="navbar-link" data-nav-link>Courses</a>
+            </li>
+
+            <li>
+              <a href="" class="navbar-link" data-nav-link>Payment</a>
+            </li>
+
+            <li>
+              <a href="index.html" class="navbar-link" data-nav-link>Feedback</a>
+            </li>
+
+            <li>
+              <a href="index.html" class="navbar-link" data-nav-link>contact us</a>
+            </li>
+
+          </ul>
+
+        </nav>
+
+        <button class="btn btn-primary">Login</button>
+
+      </div>
+    </div>
+
+  </header>
+
+
+
+
+
+  <main>
+    <article>
+
+      <!-- 
+        - #HERO
+      -->
+
+      <section class="hero" id="home" style="min-height: 200px;">
+        <!-- Background Video -->
+        <video class="hero-video" autoplay muted loop playsinline>
+          <source src="img/0215.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      <br>
+      
+        <div class="container">
+          <p style="color: rgb(213, 213, 213);">Scroll Down</p>
+          <a href="#package" style="color: rgb(213, 213, 213);">
+            <i class="fas fa-arrow-down"></i>
+          </a>
+        </div>
+      </section>
+
+
+      <h1 style="margin-top: 30px; margin-bottom: 15px;">Sorting Steps Visualizer</h1>
+      <div>
+        <button onclick="startSort('bubble')">Bubble Sort</button>
+        <button onclick="startSort('selection')">Selection Sort</button>
+        <button onclick="startSort('insertion')">Insertion Sort</button>
+        <button onclick="startSort('merge')">Merge Sort</button>
+        <button onclick="startSort('quick')">Quick Sort</button>
+        <button onclick="startSort('count')">Count Sort</button>
+        <button onclick="resetArray()">Reset Array</button>
+      </div>
+    
+      <!-- This shows the current array visually -->
+      <div id="arrayDisplay"></div>
+      <!-- This shows the algorithm information after sorting completes -->
+      <div id="infoDisplay"></div>
+      <!-- This displays the list of iterations (each step of the array) -->
+      <div id="stepsDisplay"></div>
+    
+      <script>
+        // Initial unsorted array.
+        const originalArray = [45, 2, 78, 9, 98, 7];
+        let array = [...originalArray];
+        // Will hold snapshots of the array at each iteration.
+        let iterations = [];
+        let startTime, endTime;
+        // Adjust delay between steps (milliseconds)
+        const delayTime = 300;
+    
+        // Predefined time complexities for each algorithm.
+        const complexities = {
+          bubble: "O(n²)",
+          selection: "O(n²)",
+          insertion: "O(n²) worst-case, O(n) best-case",
+          merge: "O(n log n)",
+          quick: "O(n log n) average, O(n²) worst-case",
+          count: "O(n + k)"
+        };
+    
+        // Displays the current state of the array as boxes.
+        function displayArray(highlightIndices = []) {
+          const arrayDisplay = document.getElementById("arrayDisplay");
+          arrayDisplay.innerHTML = "";
+          array.forEach((num, index) => {
+            const span = document.createElement("span");
+            span.className = "number";
+            span.textContent = num;
+            if (highlightIndices.includes(index)) {
+              span.classList.add("highlight");
+            }
+            arrayDisplay.appendChild(span);
+          });
         }
-        arrayDisplay.appendChild(span);
-      });
-    }
-
-    // Records the current state of the array.
-    function recordIteration() {
-      iterations.push(array.slice());
-    }
-
-    // After sorting is finished, display all the iterations.
-    function displayIterations() {
-      const stepsDisplay = document.getElementById("stepsDisplay");
-      stepsDisplay.innerHTML = "<h3>Iterations:</h3>";
-      iterations.forEach((stepArray, index) => {
-        const div = document.createElement("div");
-        div.className = "step";
-        div.textContent = "Step " + index + ": " + stepArray.join(" ");
-        stepsDisplay.appendChild(div);
-      });
-    }
-
-    // Disable/enable buttons during sorting.
-    function disableButtons(disabled) {
-      document.querySelectorAll("button").forEach(btn => {
-        btn.disabled = disabled;
-      });
-    }
-
-    // Reset the array and clear the iterations and info displays.
-    function resetArray() {
-      array = [...originalArray];
-      iterations = [];
-      document.getElementById("infoDisplay").innerHTML = "";
-      document.getElementById("stepsDisplay").innerHTML = "";
-      displayArray();
-      recordIteration();  // Record initial state as step 0.
-    }
-
-    // A helper delay function.
-    function delay(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    // ------------- Sorting Algorithms (with iteration recording) -------------
-
-    // Bubble Sort
-    async function bubbleSort() {
-      let n = array.length;
-      for (let i = 0; i < n; i++) {
-        for (let j = 0; j < n - i - 1; j++) {
-          displayArray([j, j + 1]);
-          await delay(delayTime);
-          if (array[j] > array[j + 1]) {
-            [array[j], array[j + 1]] = [array[j + 1], array[j]];
-            displayArray([j, j + 1]);
+    
+        // Records the current state of the array.
+        function recordIteration() {
+          iterations.push(array.slice());
+        }
+    
+        // After sorting is finished, display all the iterations.
+        function displayIterations() {
+          const stepsDisplay = document.getElementById("stepsDisplay");
+          stepsDisplay.innerHTML = "<h3>Iterations:</h3>";
+          iterations.forEach((stepArray, index) => {
+            const div = document.createElement("div");
+            div.className = "step";
+            div.textContent = "Step " + index + ": " + stepArray.join(" ");
+            stepsDisplay.appendChild(div);
+          });
+        }
+    
+        // Disable/enable buttons during sorting.
+        function disableButtons(disabled) {
+          document.querySelectorAll("button").forEach(btn => {
+            btn.disabled = disabled;
+          });
+        }
+    
+        // Reset the array and clear the iterations and info displays.
+        function resetArray() {
+          array = [...originalArray];
+          iterations = [];
+          document.getElementById("infoDisplay").innerHTML = "";
+          document.getElementById("stepsDisplay").innerHTML = "";
+          displayArray();
+          recordIteration();  // Record initial state as step 0.
+        }
+    
+        // A helper delay function.
+        function delay(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+    
+        // ------------- Sorting Algorithms (with iteration recording) -------------
+    
+        // Bubble Sort
+        async function bubbleSort() {
+          let n = array.length;
+          for (let i = 0; i < n; i++) {
+            for (let j = 0; j < n - i - 1; j++) {
+              displayArray([j, j + 1]);
+              await delay(delayTime);
+              if (array[j] > array[j + 1]) {
+                [array[j], array[j + 1]] = [array[j + 1], array[j]];
+                displayArray([j, j + 1]);
+                await delay(delayTime);
+                recordIteration();
+              }
+            }
+          }
+        }
+    
+        // Selection Sort
+        async function selectionSort() {
+          let n = array.length;
+          for (let i = 0; i < n; i++) {
+            let minIndex = i;
+            for (let j = i + 1; j < n; j++) {
+              displayArray([minIndex, j]);
+              await delay(delayTime);
+              if (array[j] < array[minIndex]) {
+                minIndex = j;
+                displayArray([i, minIndex]);
+                await delay(delayTime);
+              }
+            }
+            if (minIndex !== i) {
+              [array[i], array[minIndex]] = [array[minIndex], array[i]];
+              displayArray([i, minIndex]);
+              await delay(delayTime);
+              recordIteration();
+            }
+          }
+        }
+    
+        // Insertion Sort
+        async function insertionSort() {
+          let n = array.length;
+          for (let i = 1; i < n; i++) {
+            let key = array[i];
+            let j = i - 1;
+            while (j >= 0 && array[j] > key) {
+              displayArray([j, j + 1]);
+              await delay(delayTime);
+              array[j + 1] = array[j];
+              j--;
+              displayArray([j + 1]);
+              await delay(delayTime);
+              recordIteration();
+            }
+            array[j + 1] = key;
+            displayArray([j + 1]);
             await delay(delayTime);
             recordIteration();
           }
         }
-      }
-    }
-
-    // Selection Sort
-    async function selectionSort() {
-      let n = array.length;
-      for (let i = 0; i < n; i++) {
-        let minIndex = i;
-        for (let j = i + 1; j < n; j++) {
-          displayArray([minIndex, j]);
-          await delay(delayTime);
-          if (array[j] < array[minIndex]) {
-            minIndex = j;
-            displayArray([i, minIndex]);
+    
+        // Merge Sort (recursive)
+        async function mergeSort(start = 0, end = array.length - 1) {
+          if (start >= end) return;
+          const mid = Math.floor((start + end) / 2);
+          await mergeSort(start, mid);
+          await mergeSort(mid + 1, end);
+          await merge(start, mid, end);
+        }
+    
+        async function merge(start, mid, end) {
+          let left = array.slice(start, mid + 1);
+          let right = array.slice(mid + 1, end + 1);
+          let i = 0, j = 0, k = start;
+          while (i < left.length && j < right.length) {
+            displayArray([k]);
             await delay(delayTime);
+            if (left[i] <= right[j]) {
+              array[k] = left[i];
+              i++;
+            } else {
+              array[k] = right[j];
+              j++;
+            }
+            k++;
+            displayArray([k - 1]);
+            await delay(delayTime);
+            recordIteration();
+          }
+          while (i < left.length) {
+            array[k] = left[i];
+            displayArray([k]);
+            await delay(delayTime);
+            i++;
+            k++;
+            recordIteration();
+          }
+          while (j < right.length) {
+            array[k] = right[j];
+            displayArray([k]);
+            await delay(delayTime);
+            j++;
+            k++;
+            recordIteration();
           }
         }
-        if (minIndex !== i) {
-          [array[i], array[minIndex]] = [array[minIndex], array[i]];
-          displayArray([i, minIndex]);
+    
+        // Quick Sort (recursive)
+        async function quickSort(start = 0, end = array.length - 1) {
+          if (start < end) {
+            let pivotIndex = await partition(start, end);
+            await quickSort(start, pivotIndex - 1);
+            await quickSort(pivotIndex + 1, end);
+          }
+        }
+    
+        async function partition(start, end) {
+          let pivot = array[end];
+          let i = start;
+          for (let j = start; j < end; j++) {
+            displayArray([j, end]);
+            await delay(delayTime);
+            if (array[j] < pivot) {
+              [array[i], array[j]] = [array[j], array[i]];
+              displayArray([i, j]);
+              await delay(delayTime);
+              i++;
+              recordIteration();
+            }
+          }
+          [array[i], array[end]] = [array[end], array[i]];
+          displayArray([i, end]);
           await delay(delayTime);
           recordIteration();
+          return i;
         }
-      }
-    }
-
-    // Insertion Sort
-    async function insertionSort() {
-      let n = array.length;
-      for (let i = 1; i < n; i++) {
-        let key = array[i];
-        let j = i - 1;
-        while (j >= 0 && array[j] > key) {
-          displayArray([j, j + 1]);
-          await delay(delayTime);
-          array[j + 1] = array[j];
-          j--;
-          displayArray([j + 1]);
-          await delay(delayTime);
-          recordIteration();
+    
+        // Count Sort (for non-negative integers)
+        async function countSort() {
+          let maxVal = Math.max(...array);
+          let countArr = new Array(maxVal + 1).fill(0);
+          // Count frequency.
+          for (let i = 0; i < array.length; i++) {
+            countArr[array[i]]++;
+            displayArray([i]);
+            await delay(delayTime / 2);
+          }
+          // Reconstruct the sorted array.
+          let index = 0;
+          for (let i = 0; i < countArr.length; i++) {
+            while (countArr[i] > 0) {
+              array[index] = i;
+              displayArray([index]);
+              await delay(delayTime);
+              recordIteration();
+              index++;
+              countArr[i]--;
+            }
+          }
         }
-        array[j + 1] = key;
-        displayArray([j + 1]);
-        await delay(delayTime);
-        recordIteration();
-      }
-    }
-
-    // Merge Sort (recursive)
-    async function mergeSort(start = 0, end = array.length - 1) {
-      if (start >= end) return;
-      const mid = Math.floor((start + end) / 2);
-      await mergeSort(start, mid);
-      await mergeSort(mid + 1, end);
-      await merge(start, mid, end);
-    }
-
-    async function merge(start, mid, end) {
-      let left = array.slice(start, mid + 1);
-      let right = array.slice(mid + 1, end + 1);
-      let i = 0, j = 0, k = start;
-      while (i < left.length && j < right.length) {
-        displayArray([k]);
-        await delay(delayTime);
-        if (left[i] <= right[j]) {
-          array[k] = left[i];
-          i++;
-        } else {
-          array[k] = right[j];
-          j++;
+    
+        // ------------- Start the Sort -------------
+        async function startSort(type) {
+          disableButtons(true);
+          // Reset array and clear any previous info/iterations.
+          resetArray();
+          document.getElementById("infoDisplay").innerHTML = "";
+          document.getElementById("stepsDisplay").innerHTML = "";
+          
+          // Record start time.
+          startTime = performance.now();
+          
+          // Run the chosen sort.
+          switch (type) {
+            case "bubble":
+              await bubbleSort();
+              break;
+            case "selection":
+              await selectionSort();
+              break;
+            case "insertion":
+              await insertionSort();
+              break;
+            case "merge":
+              await mergeSort();
+              break;
+            case "quick":
+              await quickSort();
+              break;
+            case "count":
+              await countSort();
+              break;
+          }
+          
+          // Record end time and compute the elapsed time.
+          endTime = performance.now();
+          let timeTaken = (endTime - startTime).toFixed(2);
+          let stepsCount = iterations.length;
+          
+          // Display algorithm info.
+          const infoHTML = `
+            <h3>Algorithm Info:</h3>
+            <p>Time Complexity: ${complexities[type]}</p>
+            <p>Time Required: ${timeTaken} ms</p>
+            <p>Number of Steps: ${stepsCount}</p>
+          `;
+          document.getElementById("infoDisplay").innerHTML = infoHTML;
+          
+          // Display the recorded iterations.
+          displayIterations();
+          disableButtons(false);
         }
-        k++;
-        displayArray([k - 1]);
-        await delay(delayTime);
-        recordIteration();
-      }
-      while (i < left.length) {
-        array[k] = left[i];
-        displayArray([k]);
-        await delay(delayTime);
-        i++;
-        k++;
-        recordIteration();
-      }
-      while (j < right.length) {
-        array[k] = right[j];
-        displayArray([k]);
-        await delay(delayTime);
-        j++;
-        k++;
-        recordIteration();
-      }
-    }
+    
+        // Initialize the page with the unsorted array.
+        resetArray();
+      </script>
 
-    // Quick Sort (recursive)
-    async function quickSort(start = 0, end = array.length - 1) {
-      if (start < end) {
-        let pivotIndex = await partition(start, end);
-        await quickSort(start, pivotIndex - 1);
-        await quickSort(pivotIndex + 1, end);
-      }
-    }
 
-    async function partition(start, end) {
-      let pivot = array[end];
-      let i = start;
-      for (let j = start; j < end; j++) {
-        displayArray([j, end]);
-        await delay(delayTime);
-        if (array[j] < pivot) {
-          [array[i], array[j]] = [array[j], array[i]];
-          displayArray([i, j]);
-          await delay(delayTime);
-          i++;
-          recordIteration();
-        }
-      }
-      [array[i], array[end]] = [array[end], array[i]];
-      displayArray([i, end]);
-      await delay(delayTime);
-      recordIteration();
-      return i;
-    }
 
-    // Count Sort (for non-negative integers)
-    async function countSort() {
-      let maxVal = Math.max(...array);
-      let countArr = new Array(maxVal + 1).fill(0);
-      // Count frequency.
-      for (let i = 0; i < array.length; i++) {
-        countArr[array[i]]++;
-        displayArray([i]);
-        await delay(delayTime / 2);
-      }
-      // Reconstruct the sorted array.
-      let index = 0;
-      for (let i = 0; i < countArr.length; i++) {
-        while (countArr[i] > 0) {
-          array[index] = i;
-          displayArray([index]);
-          await delay(delayTime);
-          recordIteration();
-          index++;
-          countArr[i]--;
-        }
-      }
-    }
 
-    // ------------- Start the Sort -------------
-    async function startSort(type) {
-      disableButtons(true);
-      // Reset array and clear any previous info/iterations.
-      resetArray();
-      document.getElementById("infoDisplay").innerHTML = "";
-      document.getElementById("stepsDisplay").innerHTML = "";
-      
-      // Record start time.
-      startTime = performance.now();
-      
-      // Run the chosen sort.
-      switch (type) {
-        case "bubble":
-          await bubbleSort();
-          break;
-        case "selection":
-          await selectionSort();
-          break;
-        case "insertion":
-          await insertionSort();
-          break;
-        case "merge":
-          await mergeSort();
-          break;
-        case "quick":
-          await quickSort();
-          break;
-        case "count":
-          await countSort();
-          break;
-      }
-      
-      // Record end time and compute the elapsed time.
-      endTime = performance.now();
-      let timeTaken = (endTime - startTime).toFixed(2);
-      let stepsCount = iterations.length;
-      
-      // Display algorithm info.
-      const infoHTML = `
-        <h3>Algorithm Info:</h3>
-        <p>Time Complexity: ${complexities[type]}</p>
-        <p>Time Required: ${timeTaken} ms</p>
-        <p>Number of Steps: ${stepsCount}</p>
-      `;
-      document.getElementById("infoDisplay").innerHTML = infoHTML;
-      
-      // Display the recorded iterations.
-      displayIterations();
-      disableButtons(false);
-    }
 
-    // Initialize the page with the unsorted array.
-    resetArray();
-  </script>
+
+<!-- 
+    - #FOOTER
+  -->
+
+  <footer class="footer">
+
+    <div class="footer-top">
+      <div class="container">
+
+        <div class="footer-brand">
+
+            <a href="#" class="logo" style="font-weight: bold; color: white; font-size: 24px;">
+            UniCourse
+            </a>
+
+          <p class="footer-text">
+            This course provides a fundamental understanding of data organization and efficient problem-solving techniques in computer science. It covers essential data structures such as arrays, linked lists, stacks, queues, trees, and graphs, along with their applications. 
+          </p>
+
+        </div>
+
+        <div class="footer-contact">
+
+          <h4 class="contact-title">Contact Us</h4>
+
+          <p class="contact-text">
+            Feel free to contact and reach us !!
+          </p>
+
+          <ul>
+
+            <li class="contact-item">
+              <ion-icon name="call-outline"></ion-icon>
+
+              <a href="tel:+01123456790" class="contact-link">+880 (163) 1511 325</a>
+            </li>
+
+            <li class="contact-item">
+              <ion-icon name="mail-outline"></ion-icon>
+
+              <a href="mailto:info.tourly.com" class="contact-link">tahmeedferdous.netlify.app</a>
+            </li>
+
+            <li class="contact-item">
+              <ion-icon name="location-outline"></ion-icon>
+
+              <address>H-3/4 R-7/A Kaderabad Housing Mohammadpur</address>
+            </li>
+
+          </ul>
+
+        </div>
+
+        <div class="footer-form">
+
+          <p class="form-text">
+            Subscribe our newsletter for more update & news !!
+          </p>
+
+          <form action="" class="form-wrapper">
+            <input type="email" name="email" class="input-field" placeholder="Enter Your Email" required>
+
+            <button type="submit" class="btn btn-secondary">Subscribe</button>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+
+        <p class="copyright">
+          &copy; 2025 <a href="">UniCourse</a>. All rights reserved
+        </p>
+
+        <ul class="footer-bottom-list">
+
+          <li>
+            <a href="#" class="footer-bottom-link">Privacy Policy</a>
+          </li>
+
+          <li>
+            <a href="#" class="footer-bottom-link">Term & Condition</a>
+          </li>
+
+          <li>
+            <a href="#" class="footer-bottom-link">FAQ</a>
+          </li>
+
+        </ul>
+
+      </div>
+    </div>
+
+  </footer>
+
+      
+  <!-- 
+    - #GO TO TOP
+  -->
+
+  <a href="#top" class="go-top" data-go-top>
+    <ion-icon name="chevron-up-outline"></ion-icon>
+  </a>
+
+
+  <!-- 
+    - ionicon link
+  -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <script src="js/app.js"></script>
 </body>
 </html>
 
