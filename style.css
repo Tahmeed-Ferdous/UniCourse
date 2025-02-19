@@ -183,7 +183,10 @@ body { background: var(--white); }
   font-size: var(--fs-5);
 }
 
-
+.card-text a{
+  color: var(--black-coral);
+  font-size: var(--fs-5);
+}
 
 
 
@@ -481,6 +484,10 @@ body { background: var(--white); }
   padding: 20px;
 }
 
+.popular-card .card-content:hover {
+  transform: scale(0.9);
+  transition: transform 0.3s ease-in-out;
+}
 
 .popular-card .card-rating {
   background: var(--bright-navy-blue);
@@ -593,6 +600,11 @@ body { background: var(--white); }
   color: var(--white);
   padding: 25px 20px;
   text-align: center;
+}
+
+.package-card .card-price:hover {
+  background-color: hsl(214, 76%, 39%);
+  transition: background-color 0.3s ease-in-out;
 }
 
 .package-card .card-price .wrapper {
